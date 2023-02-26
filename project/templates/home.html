@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <!-- Recipes Categories
+  ======================= -->
+  <section id="categories">
+    <div class="container">
+      <form action="{{ url_for('search.srch_handle') }}" method="POST">
+        <div class="input-group rounded">
+          <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" id="search" name="search" required/>
+          <span class="input-group-text border-0" id="search-addon">
+            <button type="submit" class="btn btn-outline-dark"><i class="fa fa-search"></i></button>
+          </span>
+        </div>
+      </form>
+  </section>
+
+  <!-- Recipes Items
+  ================== -->
+  <section id="items">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Recipes</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        {% if recipes == [] %}
+          <div class="slideInUp">
+            <h4>There ain't any yet.</h4>
+          </div>
+        {% else %}
+
+        <!-- recipe item -->
+          {% for recipe in recipes.items %}
+            <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+              <div class="recipe-item text-center">
+                <a href="{{ url_for('recipes.index', id=recipe.id) }}">
+
+                  <img src="{{ recipe.image }}" alt="{{ recipe.title }}" class="recipe-picture" />
+                </a>
+                <br />
+                <h3>{{ recipe.title }}</h3>
+              </div>
+            </div>
+          {% endfor %}
+
+          
+        
+  </section>
+<section id="categories">
+  <div class="container">
+      <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm flex-wrap">
+          {% if recipes.has_prev %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('home.index', pn=recipes.prev_num) }}">Previous</a></li>
+          {% endif %}
+          {% for nm in recipes.iter_pages() %}
+            {% if nm %}
+              <li class="page-item"><a class="page-link" href="{{ url_for('home.index', pn=nm) }}">{{ nm }}</a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="#">...</a>
+            {% endif %}
+          {% endfor %}
+          {% if recipes.has_next %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('home.index', pn=recipes.next_num) }}">Next</a></li>
+          {% endif %}
+      </nav>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
